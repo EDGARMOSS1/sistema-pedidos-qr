@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa de Mesas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            color: #222;
+        }
+
+        header {
+            background-color: #b71c1c;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .mesa {
+            background-color: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-top: 8px solid #999;
+        }
+
+        .libre {
+            border-top-color: #2e7d32;
+        }
+
+        .pendiente {
+            border-top-color: #f9a825;
+        }
+
+        .preparacion {
+            border-top-color: #1565c0;
+        }
+
+        .listo {
+            border-top-color: #6a1b9a;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .estado {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .boton {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 14px;
+            background-color: #1565c0;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .boton:hover {
+            background-color: #0d47a1;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Mapa de Mesas</h1>
+    <p>Estado actual de las mesas del restaurante</p>
+</header>
+
+<main>
+    <div class="grid">
+        {% for dato in datos_mesas %}
+            <div class="mesa {{ dato.estado }}">
+                <h2>Mesa {{ dato.mesa.numero }}</h2>
+
+                <p class="estado">{{ dato.estado_texto }}</p>
+
+                {% if dato.cliente %}
+                    <p><strong>Cliente:</strong> {{ dato.cliente }}</p>
+                {% endif %}
+
+                {% if dato.pedido_id %}
+                    <p><strong>Pedido:</strong> #{{ dato.pedido_id }}</p>
+                {% else %}
+                    <p>No hay pedido activo.</p>
+                {% endif %}
+
+                <a class="boton" href="/mesa/{{ dato.mesa.numero }}/">
+                    Abrir menú de mesa
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</main>
+
+</body>
+</html>
