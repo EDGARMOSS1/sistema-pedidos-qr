@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pedido confirmado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            color: #222;
+        }
+
+        header {
+            background-color: #2e7d32;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 15px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .total {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #1565c0;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        a:hover {
+            background-color: #0d47a1;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Pedido enviado correctamente</h1>
+</header>
+
+<main>
+    <div class="card">
+        <h2>Gracias, {{ pedido.nombre_cliente }}</h2>
+
+        <p>Tu pedido fue enviado a cocina.</p>
+        <p><strong>Mesa:</strong> {{ pedido.mesa.numero }}</p>
+        <p><strong>Estado:</strong> {{ pedido.get_estado_display }}</p>
+
+        <h3>Detalle del pedido</h3>
+
+        <ul>
+            {% for detalle in pedido.detalles.all %}
+                <li>
+                    {{ detalle.cantidad }} x {{ detalle.producto.nombre }}
+                    - $ {{ detalle.subtotal }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <p class="total">Total: $ {{ pedido.total }}</p>
+
+        <a href="/mesa/{{ pedido.mesa.numero }}/">Hacer otro pedido</a>
+    </div>
+</main>
+
+</body>
+</html>

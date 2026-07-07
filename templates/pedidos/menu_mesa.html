@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Menú Mesa {{ mesa.numero }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background-color: #b71c1c;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 25px auto;
+            padding: 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 18px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        h2 {
+            color: #1565c0;
+        }
+
+        h3 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 6px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .producto {
+            border-bottom: 1px solid #ddd;
+            padding: 12px 0;
+        }
+
+        .producto:last-child {
+            border-bottom: none;
+        }
+
+        .precio {
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .boton {
+            background-color: #1565c0;
+            color: white;
+            border: none;
+            padding: 13px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .boton:hover {
+            background-color: #0d47a1;
+        }
+
+        .error {
+            background-color: #ffebee;
+            color: #b71c1c;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Menú Digital</h1>
+    <p>Mesa {{ mesa.numero }}</p>
+</header>
+
+<main>
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="card">
+            <h2>Datos del cliente</h2>
+
+            {% if error %}
+                <div class="error">{{ error }}</div>
+            {% endif %}
+
+            <label>Nombre para el pedido:</label>
+            <input type="text" name="nombre_cliente" placeholder="Ejemplo: Edgar" required>
+        </div>
+
+        <div class="card">
+            <h2>Productos disponibles</h2>
+
+            {% for categoria in categorias %}
+                <h3>{{ categoria.nombre }}</h3>
+
+                {% for producto in productos %}
+                    {% if producto.categoria.id == categoria.id %}
+                        <div class="producto">
+                            <strong>{{ producto.nombre }}</strong>
+                            <p>{{ producto.descripcion }}</p>
+                            <p class="precio">$ {{ producto.precio }}</p>
+
+                            <label>Cantidad:</label>
+                            <input type="number" name="producto_{{ producto.id }}" min="0" value="0">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <button class="boton" type="submit">Enviar pedido</button>
+    </form>
+</main>
+
+</body>
+</html>
