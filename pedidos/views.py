@@ -81,3 +81,34 @@ def pedido_confirmado(request, pedido_id):
     return render(request, 'pedidos/pedido_confirmado.html', {
         'pedido': pedido
     })
+def panel_cocina(request):
+    pedidos = Pedido.objects.exclude(
+        estado=Pedido.Estado.ENTREGADO
+    ).order_by('fecha_creacion')
+
+    return render(request, 'pedidos/panel_cocina.html', {
+        'pedidos': pedidos
+    })
+
+
+def cambiar_estado_pedido(request, pedido_id, nuevo_estado):
+    pedido = get_object_or_404(Pedido, id=pedido_id)
+
+    estados_validos = [
+        Pedido.Estado.PENDIENTE,
+        Pedido.Estado.PREPARACION,
+        Pedido.Estado.LISTO,
+        Pedido.Estado.ENTREGADO
+    ]
+
+    if nuevo_estado in estados_validos:
+        pedido.cambiar_estado(nuevo_estado)
+
+        RegistroEvento.objects.create(
+            pedido=pedido,
+            mesa=pedido.mesa,
+            tipo_evento=RegistroEvento.TipoEvento.CAMBIO_ESTADO,
+            descripcion=f'El pedido cambió al estado: {pedido.get_estado_display()}'
+        )
+
+    return redirect('panel_cocina')

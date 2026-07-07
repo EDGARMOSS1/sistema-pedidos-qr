@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Cocina</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            color: #222;
+        }
+
+        header {
+            background-color: #b71c1c;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .pedido {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .estado {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .botones {
+            margin-top: 15px;
+        }
+
+        .boton {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-right: 8px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+        }
+
+        .azul {
+            background-color: #1565c0;
+        }
+
+        .verde {
+            background-color: #2e7d32;
+        }
+
+        .gris {
+            background-color: #555;
+        }
+
+        .vacio {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Panel de Cocina</h1>
+    <p>Pedidos activos del restaurante</p>
+</header>
+
+<main>
+    {% if pedidos %}
+        {% for pedido in pedidos %}
+            <div class="pedido">
+                <h2>Pedido #{{ pedido.id }} - Mesa {{ pedido.mesa.numero }}</h2>
+
+                <p><strong>Cliente:</strong> {{ pedido.nombre_cliente }}</p>
+                <p><strong>Estado:</strong> <span class="estado">{{ pedido.get_estado_display }}</span></p>
+                <p><strong>Fecha:</strong> {{ pedido.fecha_creacion }}</p>
+
+                <h3>Productos</h3>
+                <ul>
+                    {% for detalle in pedido.detalles.all %}
+                        <li>
+                            {{ detalle.cantidad }} x {{ detalle.producto.nombre }}
+                            - $ {{ detalle.subtotal }}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <p class="total">Total: $ {{ pedido.total }}</p>
+
+                <div class="botones">
+                    <a class="boton azul" href="/pedido/{{ pedido.id }}/cambiar-estado/preparacion/">
+                        En preparación
+                    </a>
+
+                    <a class="boton verde" href="/pedido/{{ pedido.id }}/cambiar-estado/listo/">
+                        Listo
+                    </a>
+
+                    <a class="boton gris" href="/pedido/{{ pedido.id }}/cambiar-estado/entregado/">
+                        Entregado
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="vacio">
+            <h2>No hay pedidos activos</h2>
+            <p>Cuando un cliente envíe un pedido, aparecerá en esta pantalla.</p>
+        </div>
+    {% endif %}
+</main>
+
+</body>
+</html>
