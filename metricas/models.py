@@ -31,3 +31,21 @@ class RegistroEvento(models.Model):
 
     def __str__(self):
         return f"{self.tipo_evento} - Mesa {self.mesa.numero}"
+
+
+class LogPedido(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    pedido = models.ForeignKey(
+        Pedido,
+        on_delete=models.CASCADE,
+        related_name='logs_metricas'
+    )
+    tiempo_captura_ms = models.PositiveIntegerField()
+    tiempo_procesamiento_ms = models.PositiveIntegerField()
+
+    class Meta:
+        db_table = 'log_pedidos'
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"Log pedido #{self.pedido.id}"

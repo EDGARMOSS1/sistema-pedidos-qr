@@ -1,10 +1,13 @@
+import time
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db import transaction
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
+
 from mesas.models import Mesa
 from menu.models import Categoria, Producto
-from metricas.models import RegistroEvento
+from metricas.models import RegistroEvento, LogPedido
 from .models import Pedido, DetallePedido
 
 
@@ -30,6 +33,8 @@ def menu_mesa(request, numero_mesa):
 
             if tiempo_registro < 0:
                 tiempo_registro = 0
+
+        tiempo_captura_ms = tiempo_registro * 1000
 
         if not nombre_cliente:
             return render(request, 'pedidos/menu_mesa.html', {
@@ -62,6 +67,8 @@ def menu_mesa(request, numero_mesa):
                 'inicio_registro': inicio_registro_texto or timezone.now().isoformat()
             })
 
+        inicio_procesamiento = time.perf_counter()
+
         with transaction.atomic():
             pedido = Pedido.objects.create(
                 mesa=mesa,
@@ -86,6 +93,19 @@ def menu_mesa(request, numero_mesa):
                 mesa=mesa,
                 tipo_evento=RegistroEvento.TipoEvento.PEDIDO_CREADO,
                 descripcion=f'Pedido creado desde la mesa {mesa.numero}'
+            )
+
+            tiempo_procesamiento_ms = int(
+                (time.perf_counter() - inicio_procesamiento) * 1000
+            )
+
+            if tiempo_procesamiento_ms <= 0:
+                tiempo_procesamiento_ms = 1
+
+            LogPedido.objects.create(
+                pedido=pedido,
+                tiempo_captura_ms=tiempo_captura_ms,
+                tiempo_procesamiento_ms=tiempo_procesamiento_ms
             )
 
         return redirect('pedido_confirmado', pedido_id=pedido.id)
@@ -137,6 +157,8 @@ def cambiar_estado_pedido(request, pedido_id, nuevo_estado):
         )
 
     return redirect('panel_cocina')
+
+
 def historial_pedidos(request):
     pedidos = Pedido.objects.filter(
         estado=Pedido.Estado.ENTREGADO
