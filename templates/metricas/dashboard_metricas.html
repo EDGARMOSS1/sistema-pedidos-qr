@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Métricas del Sistema</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            color: #222;
+        }
+
+        header {
+            background-color: #b71c1c;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .numero {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1565c0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        th {
+            background-color: #1565c0;
+            color: white;
+            padding: 12px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .boton {
+            display: inline-block;
+            margin-top: 20px;
+            margin-right: 10px;
+            background-color: #1565c0;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .boton:hover {
+            background-color: #0d47a1;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Métricas del Sistema</h1>
+    <p>Indicadores generados por los pedidos del restaurante</p>
+</header>
+
+<main>
+    <div class="cards">
+        <div class="card">
+            <h3>Total de pedidos</h3>
+            <p class="numero">{{ total_pedidos }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Pedidos activos</h3>
+            <p class="numero">{{ total_activos }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Pedidos entregados</h3>
+            <p class="numero">{{ total_entregados }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Promedio de registro</h3>
+            <p class="numero">{{ promedio_registro }} seg</p>
+        </div>
+
+        <div class="card">
+            <h3>Promedio de atención</h3>
+            <p class="numero">{{ promedio_atencion }} min</p>
+        </div>
+    </div>
+
+    <h2>Detalle de pedidos registrados</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Mesa</th>
+                <th>Cliente</th>
+                <th>Estado</th>
+                <th>Total</th>
+                <th>Tiempo registro</th>
+                <th>Tiempo atención</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+                <tr>
+                    <td>#{{ pedido.id }}</td>
+                    <td>Mesa {{ pedido.mesa.numero }}</td>
+                    <td>{{ pedido.nombre_cliente }}</td>
+                    <td>{{ pedido.get_estado_display }}</td>
+                    <td>$ {{ pedido.total }}</td>
+                    <td>{{ pedido.tiempo_registro_texto }}</td>
+                    <td>
+                        {% if pedido.tiempo_total_minutos %}
+                            {{ pedido.tiempo_total_minutos }} min
+                        {% else %}
+                            En proceso
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7">Todavía no hay pedidos registrados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="boton" href="/mesas/">Ver mapa de mesas</a>
+    <a class="boton" href="/cocina/">Ver panel de cocina</a>
+</main>
+
+</body>
+</html>

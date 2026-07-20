@@ -109,6 +109,7 @@
 <main>
     <form method="post">
         {% csrf_token %}
+        <input type="hidden" name="inicio_registro" value="{{ inicio_registro }}">
 
         <div class="card">
             <h2>Datos del cliente</h2>

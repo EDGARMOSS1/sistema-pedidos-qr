@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db import transaction
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 from mesas.models import Mesa
 from menu.models import Categoria, Producto
 from metricas.models import RegistroEvento
@@ -14,12 +16,28 @@ def menu_mesa(request, numero_mesa):
     if request.method == 'POST':
         nombre_cliente = request.POST.get('nombre_cliente', '').strip()
 
+        inicio_registro_texto = request.POST.get('inicio_registro')
+        inicio_registro = parse_datetime(inicio_registro_texto) if inicio_registro_texto else None
+        fin_registro = timezone.now()
+
+        if inicio_registro and timezone.is_naive(inicio_registro):
+            inicio_registro = timezone.make_aware(inicio_registro)
+
+        tiempo_registro = 0
+
+        if inicio_registro:
+            tiempo_registro = int((fin_registro - inicio_registro).total_seconds())
+
+            if tiempo_registro < 0:
+                tiempo_registro = 0
+
         if not nombre_cliente:
             return render(request, 'pedidos/menu_mesa.html', {
                 'mesa': mesa,
                 'categorias': categorias,
                 'productos': productos,
-                'error': 'Debes ingresar un nombre para el pedido.'
+                'error': 'Debes ingresar un nombre para el pedido.',
+                'inicio_registro': inicio_registro_texto or timezone.now().isoformat()
             })
 
         productos_seleccionados = []
@@ -40,13 +58,17 @@ def menu_mesa(request, numero_mesa):
                 'mesa': mesa,
                 'categorias': categorias,
                 'productos': productos,
-                'error': 'Debes seleccionar al menos un producto.'
+                'error': 'Debes seleccionar al menos un producto.',
+                'inicio_registro': inicio_registro_texto or timezone.now().isoformat()
             })
 
         with transaction.atomic():
             pedido = Pedido.objects.create(
                 mesa=mesa,
-                nombre_cliente=nombre_cliente
+                nombre_cliente=nombre_cliente,
+                inicio_registro=inicio_registro,
+                fin_registro=fin_registro,
+                tiempo_registro_segundos=tiempo_registro
             )
 
             for producto, cantidad in productos_seleccionados:
@@ -71,7 +93,8 @@ def menu_mesa(request, numero_mesa):
     return render(request, 'pedidos/menu_mesa.html', {
         'mesa': mesa,
         'categorias': categorias,
-        'productos': productos
+        'productos': productos,
+        'inicio_registro': timezone.now().isoformat()
     })
 
 
@@ -81,6 +104,8 @@ def pedido_confirmado(request, pedido_id):
     return render(request, 'pedidos/pedido_confirmado.html', {
         'pedido': pedido
     })
+
+
 def panel_cocina(request):
     pedidos = Pedido.objects.exclude(
         estado=Pedido.Estado.ENTREGADO

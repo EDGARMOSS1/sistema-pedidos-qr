@@ -25,6 +25,9 @@ class Pedido(models.Model):
         default=Estado.PENDIENTE
     )
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    inicio_registro = models.DateTimeField(null=True, blank=True)
+    fin_registro = models.DateTimeField(null=True, blank=True)
+    tiempo_registro_segundos = models.PositiveIntegerField(default=0)
 
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_preparacion = models.DateTimeField(null=True, blank=True)
@@ -59,9 +62,15 @@ class Pedido(models.Model):
             return round(diferencia.total_seconds() / 60, 2)
         return None
 
+    def tiempo_registro_texto(self):
+        if self.tiempo_registro_segundos:
+            minutos = self.tiempo_registro_segundos // 60
+            segundos = self.tiempo_registro_segundos % 60
+            return f"{minutos} min {segundos} seg"
+        return "Sin registro"
+
     def __str__(self):
         return f"Pedido #{self.id} - Mesa {self.mesa.numero}"
-
 
 class DetallePedido(models.Model):
     pedido = models.ForeignKey(
