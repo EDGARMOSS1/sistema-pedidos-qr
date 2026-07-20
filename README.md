@@ -1,80 +1,80 @@
-\# Sistema Integral de Pedidos Digitales para Restaurante mediante Códigos QR
+# Sistema Integral de Pedidos Digitales QR para Restaurante
 
+## Descripción del proyecto
 
+Este proyecto consiste en el desarrollo de un sistema web para la gestión de pedidos digitales en un restaurante mediante códigos QR asignados a cada mesa.
 
-Sistema web para restaurante que permite realizar pedidos desde un código QR asignado a cada mesa.
+El sistema permite que el cliente escanee el QR de su mesa, consulte el menú digital, registre su pedido y lo envíe directamente al panel de cocina. Posteriormente, el personal puede cambiar el estado del pedido y consultar métricas relacionadas con tiempos de atención, ventas y productos vendidos.
 
+El objetivo principal es reducir errores en la toma de pedidos, mejorar el control operativo del restaurante y generar datos útiles para el análisis del proceso de atención.
 
+---
 
-\## Descripción
+## Problema que resuelve
 
+En muchos restaurantes pequeños, la toma de pedidos se realiza de forma manual, lo que puede provocar:
 
+- Errores al registrar productos.
+- Demoras en la comunicación con cocina.
+- Falta de seguimiento del estado del pedido.
+- Ausencia de métricas sobre tiempos de atención.
+- Dificultad para analizar ventas y productos más solicitados.
 
-El cliente escanea el código QR de su mesa, consulta el menú digital, registra un nombre temporal y envía su pedido. El personal del restaurante visualiza los pedidos desde un panel interno y actualiza su estado: pendiente, en preparación, listo o entregado.
+Este sistema propone una solución digital sencilla, local y accesible para mejorar la administración de pedidos.
 
+---
 
+## Objetivo general
 
-El sistema registrará tiempos de atención para comparar el proceso de pedidos mediante QR contra un proceso manual tradicional.
+Desarrollar un sistema web funcional que permita registrar pedidos digitales por mesa mediante códigos QR, administrar el flujo de atención en cocina y generar métricas para el análisis operativo del restaurante.
 
+---
 
+## Objetivos específicos
 
-\## Stack tecnológico
+- Crear un menú digital accesible mediante código QR.
+- Registrar pedidos asociados a una mesa.
+- Administrar estados del pedido: pendiente, en preparación, listo y entregado.
+- Visualizar el estado de las mesas.
+- Generar códigos QR individuales por mesa.
+- Consultar historial de pedidos entregados.
+- Generar métricas de atención y ventas.
+- Exportar datos en formato CSV para análisis.
+- Probar el sistema con datos simulados.
 
+---
 
+## Tecnologías utilizadas
 
-\- Python
+- Python
+- Django
+- SQLite
+- HTML
+- CSS
+- JavaScript básico
+- Bootstrap / diseño responsivo
+- Git y GitHub
+- Librería qrcode
+- Pillow
 
-\- Django
+---
 
-\- SQLite en desarrollo
+## Módulos del sistema
 
-\- PostgreSQL para versión final
+### 1. Administración
 
-\- HTML
+Permite gestionar desde el panel administrativo:
 
-\- CSS
+- Mesas
+- Categorías
+- Productos
+- Pedidos
+- Detalles de pedido
+- Eventos del sistema
 
-\- Bootstrap
+### 2. Menú digital por mesa
 
-\- JavaScript básico
+Cada mesa cuenta con una URL propia, por ejemplo:
 
-\- Librería qrcode
-
-\- Pandas para análisis de datos
-
-
-
-\## Módulos principales
-
-
-
-\- Gestión de mesas
-
-\- Generación de códigos QR
-
-\- Menú digital
-
-\- Registro de pedidos
-
-\- Panel de cocina
-
-\- Control de estados
-
-\- Métricas de tiempos de atención
-
-
-
-\## Hipótesis
-
-
-
-La implementación de un sistema web de pedidos mediante QR reducirá en un 25% el tiempo promedio de registro de pedidos en comparación con el proceso manual tradicional.
-
-
-
-\## Estado del proyecto
-
-
-
-Estructura inicial del proyecto creada con Django.
-
+```text
+/mesa/1/
