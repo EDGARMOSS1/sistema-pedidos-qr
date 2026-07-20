@@ -12,13 +12,7 @@ El objetivo principal es reducir errores en la toma de pedidos, mejorar el contr
 
 ## Problema que resuelve
 
-En muchos restaurantes pequeños, la toma de pedidos se realiza de forma manual, lo que puede provocar:
-
-- Errores al registrar productos.
-- Demoras en la comunicación con cocina.
-- Falta de seguimiento del estado del pedido.
-- Ausencia de métricas sobre tiempos de atención.
-- Dificultad para analizar ventas y productos más solicitados.
+En muchos restaurantes pequeños, la toma de pedidos se realiza de forma manual, lo que puede provocar errores al registrar productos, demoras en la comunicación con cocina, falta de seguimiento del estado del pedido y ausencia de métricas sobre tiempos de atención.
 
 Este sistema propone una solución digital sencilla, local y accesible para mejorar la administración de pedidos.
 
@@ -52,29 +46,205 @@ Desarrollar un sistema web funcional que permita registrar pedidos digitales por
 - HTML
 - CSS
 - JavaScript básico
-- Bootstrap / diseño responsivo
 - Git y GitHub
-- Librería qrcode
+- qrcode
 - Pillow
 
 ---
 
 ## Módulos del sistema
 
-### 1. Administración
+### Administración
 
-Permite gestionar desde el panel administrativo:
+Permite gestionar mesas, categorías, productos, pedidos, detalles de pedido y eventos del sistema desde el panel administrativo de Django.
 
-- Mesas
-- Categorías
-- Productos
-- Pedidos
-- Detalles de pedido
-- Eventos del sistema
-
-### 2. Menú digital por mesa
+### Menú digital por mesa
 
 Cada mesa cuenta con una URL propia, por ejemplo:
 
 ```text
 /mesa/1/
+```
+
+Desde esta pantalla el cliente puede ingresar su nombre, seleccionar productos y enviar su pedido.
+
+### Panel de cocina
+
+Disponible en:
+
+```text
+/cocina/
+```
+
+Permite visualizar pedidos activos y cambiar su estado durante el proceso de atención.
+
+### Mapa de mesas
+
+Disponible en:
+
+```text
+/mesas/
+```
+
+Muestra el estado actual de cada mesa: libre, pendiente, en preparación o listo.
+
+### Códigos QR
+
+El sistema permite generar QR individuales para cada mesa y una vista para imprimirlos:
+
+```text
+/mesas/qrs/imprimir/
+```
+
+### Historial de pedidos
+
+Disponible en:
+
+```text
+/historial/
+```
+
+Muestra pedidos entregados, ventas registradas y tiempos de atención.
+
+### Dashboard de métricas
+
+Disponible en:
+
+```text
+/metricas/
+```
+
+Presenta indicadores como total de pedidos, pedidos activos, pedidos entregados, promedio de registro y promedio de atención.
+
+### Análisis de resultados
+
+Disponible en:
+
+```text
+/metricas/analisis/
+```
+
+Muestra venta total, venta promedio, pedido más rápido, pedido más lento, producto más vendido y tiempo promedio de atención.
+
+### Exportación CSV
+
+Disponible en:
+
+```text
+/metricas/exportar-csv/
+```
+
+Permite descargar las métricas del sistema en formato CSV.
+
+---
+
+## Instalación y ejecución
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/EDGARMOSS1/sistema-pedidos-qr.git
+```
+
+### 2. Entrar a la carpeta del proyecto
+
+```bash
+cd sistema-pedidos-qr
+```
+
+### 3. Crear entorno virtual
+
+```bash
+python -m venv venv
+```
+
+### 4. Activar entorno virtual en Windows
+
+```bash
+venv\Scripts\activate
+```
+
+### 5. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+### 6. Aplicar migraciones
+
+```bash
+python manage.py migrate
+```
+
+### 7. Crear superusuario
+
+```bash
+python manage.py createsuperuser
+```
+
+### 8. Ejecutar servidor
+
+```bash
+python manage.py runserver
+```
+
+### 9. Abrir el sistema
+
+```text
+http://127.0.0.1:8000/
+```
+
+---
+
+## Datos de prueba
+
+El sistema incluye un comando para generar pedidos simulados:
+
+```bash
+python manage.py generar_datos_prueba
+```
+
+Este comando crea registros de prueba para alimentar el historial, las métricas y el análisis de resultados.
+
+---
+
+## Rutas principales
+
+| Ruta | Descripción |
+|---|---|
+| `/` | Página principal |
+| `/admin/` | Panel administrativo |
+| `/mesas/` | Mapa visual de mesas |
+| `/mesa/1/` | Menú digital de la mesa 1 |
+| `/cocina/` | Panel de cocina |
+| `/historial/` | Historial de pedidos entregados |
+| `/metricas/` | Dashboard de métricas |
+| `/metricas/analisis/` | Análisis automático de resultados |
+| `/metricas/exportar-csv/` | Exportación de métricas en CSV |
+| `/mesas/qrs/imprimir/` | Códigos QR listos para impresión |
+
+---
+
+## Estado actual del proyecto
+
+El proyecto cuenta con un MVP funcional que permite registrar pedidos desde un menú digital, administrar pedidos desde cocina, cambiar estados de atención, visualizar mesas activas, generar códigos QR, imprimirlos, consultar historial, generar métricas, exportar información a CSV y analizar resultados automáticamente.
+
+Avance estimado del proyecto: 87%.
+
+---
+
+## Hipótesis del proyecto
+
+La implementación de un sistema digital de pedidos mediante códigos QR puede mejorar el control operativo del restaurante al reducir la dependencia del registro manual, facilitar el seguimiento de pedidos y generar datos medibles sobre tiempos de atención y ventas.
+
+---
+
+## Autor
+
+Proyecto desarrollado como parte del Proyecto Integrador Dual de Ingeniería en Sistemas Computacionales.
+
+Repositorio:
+
+```text
+https://github.com/EDGARMOSS1/sistema-pedidos-qr
+```
