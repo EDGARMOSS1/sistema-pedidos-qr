@@ -105,9 +105,23 @@
                     <p>No hay pedido activo.</p>
                 {% endif %}
 
-                <a class="boton" href="/mesa/{{ dato.mesa.numero }}/">
-                    Abrir menú de mesa
-                </a>
+            <a class="boton" href="/mesa/{{ dato.mesa.numero }}/">
+               Abrir menú de mesa
+            </a>
+
+            <a class="boton" href="/mesas/{{ dato.mesa.id }}/generar-qr/">
+                Generar QR
+            </a>
+
+            {% if dato.mesa.qr_imagen %}
+                <div style="margin-top: 15px;">
+                    <img src="{{ dato.mesa.qr_imagen.url }}" alt="QR Mesa {{ dato.mesa.numero }}" width="140">
+                    <br>
+                    <a href="{{ dato.mesa.qr_imagen.url }}" target="_blank">
+                        Ver QR
+                    </a>
+                </div>
+            {% endif %}
             </div>
         {% endfor %}
     </div>

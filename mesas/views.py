@@ -1,4 +1,10 @@
-from django.shortcuts import render
+from io import BytesIO
+import qrcode
+
+from django.core.files.base import ContentFile
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+
 from .models import Mesa
 from pedidos.models import Pedido
 
@@ -36,3 +42,38 @@ def mapa_mesas(request):
     return render(request, 'mesas/mapa_mesas.html', {
         'datos_mesas': datos_mesas
     })
+
+
+def generar_qr_mesa(request, mesa_id):
+    mesa = get_object_or_404(Mesa, id=mesa_id)
+
+    url_menu = request.build_absolute_uri(
+        reverse('menu_mesa', args=[mesa.numero])
+    )
+
+    qr = qrcode.QRCode(
+        version=1,
+        box_size=10,
+        border=4
+    )
+
+    qr.add_data(url_menu)
+    qr.make(fit=True)
+
+    imagen = qr.make_image(fill_color="black", back_color="white")
+
+    buffer = BytesIO()
+    imagen.save(buffer, format='PNG')
+
+    nombre_archivo = f'mesa_{mesa.numero}_qr.png'
+
+    mesa.qr_imagen.save(
+        nombre_archivo,
+        ContentFile(buffer.getvalue()),
+        save=False
+    )
+
+    mesa.qr_generado = True
+    mesa.save()
+
+    return redirect('mapa_mesas')
