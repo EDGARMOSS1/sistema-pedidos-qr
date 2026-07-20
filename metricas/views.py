@@ -1,4 +1,6 @@
+import csv
 from django.shortcuts import render
+from django.http import HttpResponse
 from pedidos.models import Pedido
 
 
@@ -37,3 +39,42 @@ def dashboard_metricas(request):
         'promedio_registro': promedio_registro,
         'promedio_atencion': promedio_atencion,
     })
+
+
+def exportar_metricas_csv(request):
+    pedidos = Pedido.objects.all().order_by('fecha_creacion')
+
+    response = HttpResponse(content_type='text/csv; charset=utf-8')
+    response['Content-Disposition'] = 'attachment; filename="metricas_pedidos.csv"'
+    response.write('\ufeff')
+
+    writer = csv.writer(response)
+
+    writer.writerow([
+        'ID pedido',
+        'Mesa',
+        'Cliente',
+        'Estado',
+        'Total',
+        'Fecha creación',
+        'Fecha entregado',
+        'Tiempo registro segundos',
+        'Tiempo atención minutos'
+    ])
+
+    for pedido in pedidos:
+        tiempo_atencion = pedido.tiempo_total_minutos()
+
+        writer.writerow([
+            pedido.id,
+            pedido.mesa.numero,
+            pedido.nombre_cliente,
+            pedido.get_estado_display(),
+            pedido.total,
+            pedido.fecha_creacion,
+            pedido.fecha_entregado or '',
+            pedido.tiempo_registro_segundos,
+            tiempo_atencion if tiempo_atencion is not None else ''
+        ])
+
+    return response
