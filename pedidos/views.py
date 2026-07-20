@@ -137,3 +137,28 @@ def cambiar_estado_pedido(request, pedido_id, nuevo_estado):
         )
 
     return redirect('panel_cocina')
+def historial_pedidos(request):
+    pedidos = Pedido.objects.filter(
+        estado=Pedido.Estado.ENTREGADO
+    ).order_by('-fecha_entregado', '-fecha_creacion')
+
+    total_entregados = pedidos.count()
+    venta_total = sum(pedido.total for pedido in pedidos)
+
+    tiempos_atencion = []
+
+    for pedido in pedidos:
+        tiempo = pedido.tiempo_total_minutos()
+        if tiempo is not None:
+            tiempos_atencion.append(tiempo)
+
+    promedio_atencion = 0
+    if tiempos_atencion:
+        promedio_atencion = round(sum(tiempos_atencion) / len(tiempos_atencion), 2)
+
+    return render(request, 'pedidos/historial_pedidos.html', {
+        'pedidos': pedidos,
+        'total_entregados': total_entregados,
+        'venta_total': venta_total,
+        'promedio_atencion': promedio_atencion
+    })
