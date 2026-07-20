@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Análisis de Resultados</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            color: #222;
+        }
+
+        header {
+            background-color: #b71c1c;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .numero {
+            font-size: 30px;
+            font-weight: bold;
+            color: #1565c0;
+        }
+
+        .bloque {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .bloque h2 {
+            color: #b71c1c;
+            margin-top: 0;
+        }
+
+        .boton {
+            display: inline-block;
+            margin-top: 15px;
+            margin-right: 10px;
+            padding: 12px 18px;
+            background-color: #1565c0;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .boton:hover {
+            background-color: #0d47a1;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Análisis de Resultados</h1>
+    <p>Interpretación automática de los datos generados por el sistema</p>
+</header>
+
+<main>
+    <div class="grid">
+        <div class="card">
+            <h3>Total de pedidos</h3>
+            <p class="numero">{{ total_pedidos }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Pedidos entregados</h3>
+            <p class="numero">{{ total_entregados }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Venta total</h3>
+            <p class="numero">$ {{ venta_total }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Venta promedio</h3>
+            <p class="numero">$ {{ venta_promedio }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Promedio de atención</h3>
+            <p class="numero">{{ promedio_atencion }} min</p>
+        </div>
+    </div>
+
+    <div class="bloque">
+        <h2>Pedido más rápido</h2>
+
+        {% if pedido_mas_rapido %}
+            <p><strong>Pedido:</strong> #{{ pedido_mas_rapido.id }}</p>
+            <p><strong>Mesa:</strong> {{ pedido_mas_rapido.mesa.numero }}</p>
+            <p><strong>Cliente:</strong> {{ pedido_mas_rapido.nombre_cliente }}</p>
+            <p><strong>Tiempo de atención:</strong> {{ menor_tiempo }} min</p>
+        {% else %}
+            <p>No hay pedidos entregados suficientes para calcular este dato.</p>
+        {% endif %}
+    </div>
+
+    <div class="bloque">
+        <h2>Pedido más lento</h2>
+
+        {% if pedido_mas_lento %}
+            <p><strong>Pedido:</strong> #{{ pedido_mas_lento.id }}</p>
+            <p><strong>Mesa:</strong> {{ pedido_mas_lento.mesa.numero }}</p>
+            <p><strong>Cliente:</strong> {{ pedido_mas_lento.nombre_cliente }}</p>
+            <p><strong>Tiempo de atención:</strong> {{ mayor_tiempo }} min</p>
+        {% else %}
+            <p>No hay pedidos entregados suficientes para calcular este dato.</p>
+        {% endif %}
+    </div>
+
+    <div class="bloque">
+        <h2>Producto más vendido</h2>
+
+        {% if producto_mas_vendido %}
+            <p><strong>Producto:</strong> {{ producto_mas_vendido.producto__nombre }}</p>
+            <p><strong>Cantidad vendida:</strong> {{ producto_mas_vendido.total_vendido }}</p>
+        {% else %}
+            <p>No hay productos vendidos registrados.</p>
+        {% endif %}
+    </div>
+
+    <div class="bloque">
+        <h2>Interpretación para el proyecto</h2>
+        <p>
+            Los datos generados permiten analizar el comportamiento de los pedidos del restaurante,
+            identificar tiempos de atención, volumen de ventas y productos con mayor demanda.
+            Esta información sirve como evidencia para evaluar si el uso de un sistema digital
+            mediante códigos QR mejora el control operativo y reduce la dependencia de registros manuales.
+        </p>
+    </div>
+
+    <a class="boton" href="/">Inicio</a>
+    <a class="boton" href="/metricas/">Ver métricas</a>
+    <a class="boton" href="/historial/">Ver historial</a>
+    <a class="boton" href="/metricas/exportar-csv/">Exportar CSV</a>
+</main>
+
+</body>
+</html>
