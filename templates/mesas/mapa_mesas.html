@@ -88,6 +88,15 @@
 </header>
 
 <main>
+    <div style="margin-bottom: 25px; text-align: center;">
+    <a class="boton" href="/mesas/generar-todos-qr/">
+        Generar todos los QR
+    </a>
+
+    <a class="boton" href="/mesas/qrs/imprimir/">
+        Ver QR para imprimir
+    </a>
+</div>
     <div class="grid">
         {% for dato in datos_mesas %}
             <div class="mesa {{ dato.estado }}">

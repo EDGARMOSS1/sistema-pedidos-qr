@@ -44,9 +44,7 @@ def mapa_mesas(request):
     })
 
 
-def generar_qr_mesa(request, mesa_id):
-    mesa = get_object_or_404(Mesa, id=mesa_id)
-
+def crear_qr_para_mesa(request, mesa):
     url_menu = request.build_absolute_uri(
         reverse('menu_mesa', args=[mesa.numero])
     )
@@ -76,4 +74,26 @@ def generar_qr_mesa(request, mesa_id):
     mesa.qr_generado = True
     mesa.save()
 
+
+def generar_qr_mesa(request, mesa_id):
+    mesa = get_object_or_404(Mesa, id=mesa_id)
+    crear_qr_para_mesa(request, mesa)
+
     return redirect('mapa_mesas')
+
+
+def generar_todos_qr(request):
+    mesas = Mesa.objects.filter(activa=True).order_by('numero')
+
+    for mesa in mesas:
+        crear_qr_para_mesa(request, mesa)
+
+    return redirect('imprimir_qrs')
+
+
+def imprimir_qrs(request):
+    mesas = Mesa.objects.filter(activa=True).order_by('numero')
+
+    return render(request, 'mesas/imprimir_qrs.html', {
+        'mesas': mesas
+    })
