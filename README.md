@@ -49,6 +49,7 @@ Desarrollar un sistema web funcional que permita registrar pedidos digitales por
 - Git y GitHub
 - qrcode
 - Pillow
+- python-decouple
 
 ---
 
@@ -170,25 +171,41 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 6. Aplicar migraciones
+### 6. Configurar variables de entorno
+
+El proyecto utiliza variables de entorno para manejar configuraciones básicas de seguridad.
+
+Crear un archivo llamado `.env` en la raíz del proyecto tomando como base el archivo `.env.example`.
+
+Contenido sugerido para `.env`:
+
+```env
+SECRET_KEY=coloca_aqui_tu_secret_key
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,localhost
+```
+
+El archivo `.env` no debe subirse al repositorio, ya que puede contener información sensible.
+
+### 7. Aplicar migraciones
 
 ```bash
 python manage.py migrate
 ```
 
-### 7. Crear superusuario
+### 8. Crear superusuario
 
 ```bash
 python manage.py createsuperuser
 ```
 
-### 8. Ejecutar servidor
+### 9. Ejecutar servidor
 
 ```bash
 python manage.py runserver
 ```
 
-### 9. Abrir el sistema
+### 10. Abrir el sistema
 
 ```text
 http://127.0.0.1:8000/
@@ -229,13 +246,29 @@ Este comando crea registros de prueba para alimentar el historial, las métricas
 
 El proyecto cuenta con un MVP funcional que permite registrar pedidos desde un menú digital, administrar pedidos desde cocina, cambiar estados de atención, visualizar mesas activas, generar códigos QR, imprimirlos, consultar historial, generar métricas, exportar información a CSV y analizar resultados automáticamente.
 
-Avance estimado del proyecto: 87%.
+Avance estimado del proyecto: 88%.
 
 ---
 
 ## Hipótesis del proyecto
 
 La implementación de un sistema digital de pedidos mediante códigos QR puede mejorar el control operativo del restaurante al reducir la dependencia del registro manual, facilitar el seguimiento de pedidos y generar datos medibles sobre tiempos de atención y ventas.
+
+---
+
+## Seguridad básica
+
+El proyecto utiliza un archivo `.env` para separar configuraciones sensibles del código fuente.
+
+Variables utilizadas:
+
+```env
+SECRET_KEY=clave_secreta_del_proyecto
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,localhost
+```
+
+El archivo `.env` está excluido del repositorio mediante `.gitignore`.
 
 ---
 
