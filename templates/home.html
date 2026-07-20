@@ -3,21 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <title>Sistema de Pedidos QR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            color: #222;
+        }
+
+        header {
+            background-color: #b71c1c;
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 34px;
+        }
+
+        header p {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 15px;
+        }
+
+        .descripcion {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .descripcion h2 {
+            color: #b71c1c;
+            margin-top: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            text-align: center;
+            border-top: 8px solid #1565c0;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #1565c0;
+        }
+
+        .card p {
+            font-size: 15px;
+            min-height: 55px;
+        }
+
+        .boton {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 12px 18px;
+            background-color: #b71c1c;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .boton:hover {
+            background-color: #8e1515;
+        }
+
+        footer {
+            margin-top: 35px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Sistema Integral de Pedidos Digitales</h1>
-    <h2>Restaurante mediante códigos QR</h2>
 
-    <p>
-        Este sistema permite que los clientes escaneen el código QR de su mesa,
-        consulten el menú digital, registren su nombre y envíen su pedido.
-    </p>
+<header>
+    <h1>Sistema Integral de Pedidos Digitales QR</h1>
+    <p>Restaurante con menú digital, pedidos por mesa, cocina, métricas y códigos QR</p>
+</header>
 
-    <p>
-        El personal del restaurante podrá visualizar los pedidos, cambiar su estado
-        y consultar métricas de atención.
-    </p>
+<main>
+    <section class="descripcion">
+        <h2>Panel principal del sistema</h2>
+        <p>
+            Este sistema permite administrar mesas, registrar pedidos desde un menú digital,
+            dar seguimiento a los estados en cocina, generar códigos QR por mesa y consultar
+            métricas de atención para el análisis del proyecto.
+        </p>
+    </section>
 
-    <a href="/admin/">Entrar al panel administrativo</a>
+    <section class="grid">
+        <div class="card">
+            <h3>Mapa de Mesas</h3>
+            <p>Consulta el estado actual de cada mesa y accede al menú digital correspondiente.</p>
+            <a class="boton" href="/mesas/">Entrar</a>
+        </div>
+
+        <div class="card">
+            <h3>Panel de Cocina</h3>
+            <p>Visualiza los pedidos activos y cambia su estado durante el proceso de preparación.</p>
+            <a class="boton" href="/cocina/">Entrar</a>
+        </div>
+
+        <div class="card">
+            <h3>Métricas</h3>
+            <p>Revisa indicadores de pedidos, tiempos de registro y tiempos de atención.</p>
+            <a class="boton" href="/metricas/">Entrar</a>
+        </div>
+
+        <div class="card">
+            <h3>QR para Imprimir</h3>
+            <p>Consulta los códigos QR generados para imprimirlos y colocarlos en cada mesa.</p>
+            <a class="boton" href="/mesas/qrs/imprimir/">Entrar</a>
+        </div>
+
+        <div class="card">
+            <h3>Administración</h3>
+            <p>Administra mesas, categorías, productos, pedidos y registros del sistema.</p>
+            <a class="boton" href="/admin/">Entrar</a>
+        </div>
+    </section>
+
+    <footer>
+        Proyecto Integrador Dual | Sistema de Pedidos QR para Restaurante
+    </footer>
+</main>
+
 </body>
 </html>

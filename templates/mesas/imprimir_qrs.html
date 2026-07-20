@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Impresión de QR por Mesa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            color: #222;
+        }
+
+        header {
+            background-color: #b71c1c;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .acciones {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .boton {
+            display: inline-block;
+            padding: 12px 18px;
+            background-color: #1565c0;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 5px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .qr-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border: 2px solid #ddd;
+        }
+
+        .qr-card h2 {
+            color: #b71c1c;
+        }
+
+        .qr-card img {
+            width: 200px;
+            height: 200px;
+        }
+
+        @media print {
+            header,
+            .acciones {
+                display: none;
+            }
+
+            body {
+                background-color: white;
+            }
+
+            .qr-card {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>QR por Mesa</h1>
+    <p>Códigos QR listos para imprimir y colocar en el restaurante</p>
+</header>
+
+<main>
+    <div class="acciones">
+        <a class="boton" href="/mesas/">Volver al mapa de mesas</a>
+        <a class="boton" href="/mesas/generar-todos-qr/">Generar todos los QR</a>
+        <a class="boton" href="#" onclick="window.print()">Imprimir QR</a>
+    </div>
+
+    <div class="grid">
+        {% for mesa in mesas %}
+            <div class="qr-card">
+                <h2>Mesa {{ mesa.numero }}</h2>
+
+                {% if mesa.qr_imagen %}
+                    <img src="{{ mesa.qr_imagen.url }}" alt="QR Mesa {{ mesa.numero }}">
+                    <p>Escanea para abrir el menú digital.</p>
+                {% else %}
+                    <p>No se ha generado QR para esta mesa.</p>
+                    <a class="boton" href="/mesas/{{ mesa.id }}/generar-qr/">Generar QR</a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <div class="qr-card">
+                <h2>No hay mesas registradas</h2>
+                <p>Primero agrega mesas desde el panel de administración.</p>
+            </div>
+        {% endfor %}
+    </div>
+</main>
+
+</body>
+</html>
